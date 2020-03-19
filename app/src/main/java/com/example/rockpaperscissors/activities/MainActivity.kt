@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.example.rockpaperscissors.R
+import com.example.rockpaperscissors.enums.Move
+import com.example.rockpaperscissors.enums.MatchResult
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +17,19 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbarMain)
   }
+
+  private fun winLoseCheck(playerMove: Move, computerMove: Move): MatchResult {
+    return when(setOf(playerMove, computerMove)) {
+      setOf(Move.ROCK, Move.ROCK) -> MatchResult.DRAW
+      setOf(Move.PAPER, Move.PAPER) -> MatchResult.DRAW
+      setOf(Move.SCISSORS, Move.SCISSORS) -> MatchResult.DRAW
+      setOf(Move.ROCK, Move.PAPER) -> MatchResult.LOSE
+      setOf(Move.PAPER, Move.SCISSORS) -> MatchResult.LOSE
+      setOf(Move.SCISSORS, Move.ROCK) -> MatchResult.LOSE
+      else -> MatchResult.WIN
+    }
+  }
+
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.menu_main, menu)
