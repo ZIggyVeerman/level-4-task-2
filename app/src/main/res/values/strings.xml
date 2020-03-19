@@ -1,3 +1,13 @@
 <resources>
   <string name="app_name">Rock Paper Scissors</string>
+  <string name="rock">Rock</string>
+  <string name="paper">Paper</string>
+  <string name="scissors">Scissors</string>
+  <string name="picked">Picked</string>
+  <string name="computerpicked">ComputerPicked</string>
+  <string name="welcome">Welcome</string>
+  <string name="select_rock_paper_or_scissors_to_play">Select Rock, Paper or Scissors to play</string>
+  <string name="v_s">V.S.</string>
+  <string name="your_all_time_statistics">Your all time statistics</string>
+  <string name="hier_komen_stats"><![CDATA[<HIER KOMEN STATS>]]></string>
 </resources>
