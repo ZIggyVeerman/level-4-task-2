@@ -20,7 +20,6 @@ class GameHistoryAdapter(private val playedGames: List<Game>): RecyclerView.Adap
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(game: Game) {
-
     }
   }
 }

@@ -11,4 +11,6 @@
   <string name="your_all_time_statistics">Your all time statistics</string>
   <string name="you">You</string>
   <string name="computer">Computer</string>
+  <string name="show_game_history">Show Game History</string>
+  <string name="clear_history">Clear History</string>
 </resources>
