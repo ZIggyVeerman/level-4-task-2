@@ -16,6 +16,21 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbarMain)
+
+    initViews()
+  }
+
+  private fun initViews() {
+    ivPaper.setOnClickListener{createGame(Move.PAPER)}
+    ivRock.setOnClickListener{createGame(Move.ROCK)}
+    ivScissors.setOnClickListener{createGame(Move.SCISSORS)}
+  }
+
+  private fun createGame(playerMove: Move) {
+//    TODO("add some database stuff")
+//    TODO("date now")
+//    TODO("handle computer move randomize")
+//    TODO("create function to handle move given to change image etc")
   }
 
   private fun winLoseCheck(playerMove: Move, computerMove: Move): MatchResult {

@@ -1,7 +1,7 @@
 package com.example.rockpaperscissors.converters
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.sql.Date
 
 class DateConverter {
   @TypeConverter
@@ -11,6 +11,6 @@ class DateConverter {
 
   @TypeConverter
   fun dateToTimestamp(date: Date?): Long? {
-    return date?.time?.toLong()
+    return date?.time
   }
 }
