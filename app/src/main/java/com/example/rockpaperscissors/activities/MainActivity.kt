@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -37,32 +38,25 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun createGame(playerMove: Move) {
-    val date = Calendar.getInstance().time
-    var botMove = (0..2).random().toEnum<Move>()
+    mainScope.launch {
+      var botMove = (0..2).random().toEnum<Move>()
 
-    var game = Game(
-      date = date,
-      playerMove = playerMove,
-      botMove = botMove
-    )
-    game.matchResult = winLoseCheck(playerMove, botMove)
+      var game = Game(
+        date = Calendar.getInstance().time,
+        playerMove = playerMove,
+        botMove = botMove
+      )
+      game.matchResult = winLoseCheck(playerMove, botMove)
 
-    println(game)
-
-//    mainScope.launch {
-//      gameRepository.insertGame(game)
-//    }
-
-
-//    TODO("add some database stuff")
-//    TODO("date now")
-//    TODO("handle computer move randomize")
-//    TODO("create function to handle move given to change image etc")
+      withContext(Dispatchers.IO) {
+        gameRepository.insertGame(game)
+      }
+    }
   }
 
   private fun winLoseCheck(playerMove: Move, botMove: Move): MatchResult {
     if (playerMove == botMove) return MatchResult.DRAW
-    
+
     return if (playerMove == Move.SCISSORS && botMove == Move.ROCK) {
       MatchResult.LOSE
     }else if (playerMove == Move.ROCK && botMove == Move.PAPER){
