@@ -21,18 +21,17 @@ abstract class GameRoomDatabase: RoomDatabase() {
     private var gameRoomDatabaseInstance: GameRoomDatabase? = null
 
     fun getDatabase(context: Context): GameRoomDatabase? {
-      if(gameRoomDatabaseInstance == null) {
+      if(gameRoomDatabaseInstance != null) return gameRoomDatabaseInstance
+
         synchronized(GameRoomDatabase::class.java){
           if (gameRoomDatabaseInstance == null){
-            gameRoomDatabaseInstance =
-              Room.databaseBuilder(
+            gameRoomDatabaseInstance = Room.databaseBuilder(
                 context.applicationContext,
-                GameRoomDatabase::class.java,
-                DATABASE_NAME
-              ).build()
+                GameRoomDatabase::class.java, DATABASE_NAME
+              )
+              .build()
           }
         }
-      }
       return gameRoomDatabaseInstance
     }
   }

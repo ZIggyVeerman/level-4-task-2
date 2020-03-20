@@ -13,4 +13,7 @@
   <string name="computer">Computer</string>
   <string name="show_game_history">Show Game History</string>
   <string name="clear_history">Clear History</string>
+  <string name="Draw">Draw</string>
+  <string name="Loser">Loser!</string>
+  <string name="Winner">Winner!</string>
 </resources>

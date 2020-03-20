@@ -87,9 +87,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     when(game.matchResult){
-      MatchResult.WIN -> tvWinLose.text = "You Win!"
-      MatchResult.LOSE -> tvWinLose.text = "Loser!"
-      MatchResult.DRAW -> tvWinLose.text = "Draw"
+      MatchResult.WIN -> tvWinLose.text = this.resources.getString(R.string.Winner)
+      MatchResult.LOSE -> tvWinLose.text = this.resources.getString(R.string.Loser)
+      MatchResult.DRAW -> tvWinLose.text = this.resources.getString(R.string.Draw)
     }
   }
 
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
       val gameDraws = withContext(Dispatchers.IO){
         gameRepository.getDraws()
       }
-
+      // TODO need to add stuff here
       tvStats.text = "Wins: $gameWins, Loses: $gameLoses, Draws: $gameDraws"
     }
   }

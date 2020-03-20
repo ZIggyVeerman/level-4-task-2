@@ -6,26 +6,22 @@ import com.example.rockpaperscissors.database.GameRoomDatabase
 import com.example.rockpaperscissors.models.Game
 
 class GameRepository(context: Context) {
-  private val gameDao: GameDao
+  private val gameDao: GameDao?
 
   init {
     val database = GameRoomDatabase.getDatabase(context)
-    gameDao = database!!.gameDao()
-//    TODO("werk de !! weg met let")
+    gameDao = database?.gameDao()
   }
+  suspend fun getAllGames(): List<Game> = gameDao?.getAllGames() ?: emptyList()
 
-  suspend fun getAllGames(): List<Game> = gameDao.getAllGames()
+  suspend fun getWins(): Int? = gameDao?.getWins()
 
-  suspend fun getWins(): Int = gameDao.getWins()
+  suspend fun getLose(): Int? = gameDao?.getLose()
 
-  suspend fun getLose(): Int = gameDao.getLose()
+  suspend fun getDraws(): Int? = gameDao?.getDraws()
 
-  suspend fun getDraws(): Int = gameDao.getDraws()
+  suspend fun insertGame(game: Game) = gameDao?.insertGame(game)
 
-  suspend fun insertGame(game: Game) = gameDao.insertGame(game)
-
-  suspend fun deleteGame(game: Game) = gameDao.deleteGame(game)
-
-  suspend fun deleteAllGamesFromHistory() = gameDao.deleteAllGamesFromHistory()
+  suspend fun deleteAllGamesFromHistory() = gameDao?.deleteAllGamesFromHistory()
 
 }
