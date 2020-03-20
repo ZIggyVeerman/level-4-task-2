@@ -9,6 +9,8 @@ import com.example.rockpaperscissors.R
 import com.example.rockpaperscissors.enums.Move
 import com.example.rockpaperscissors.enums.MatchResult
 import kotlinx.android.synthetic.main.activity_main.*
+import java.sql.Date
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun createGame(playerMove: Move) {
+    val date = Calendar.getInstance().time
+    println(date)
+
 //    TODO("add some database stuff")
 //    TODO("date now")
 //    TODO("handle computer move randomize")
