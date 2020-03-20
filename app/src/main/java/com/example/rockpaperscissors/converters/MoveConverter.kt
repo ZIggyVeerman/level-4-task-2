@@ -7,5 +7,7 @@ class MoveConverter  {
   @TypeConverter
   fun moveToInt(value: Move): Int = value.ordinal
   @TypeConverter
-  fun intToMove(value: Int) = enumValueOf<Move>(value.toString())
+  fun intToMove(value: Int) = value.toEnum<Move>()
+
+  private inline fun <reified T : Enum<T>> Int.toEnum(): T = enumValues<T>()[this]
 }

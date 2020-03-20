@@ -7,5 +7,7 @@ class MatchResultConverter {
   @TypeConverter
   fun matchResultToInt(value: MatchResult): Int = value.ordinal
   @TypeConverter
-  fun intToMatchResult(value: Int) = enumValueOf<MatchResult>(value.toString())
+  fun intToMatchResult(value: Int) = value.toEnum<MatchResult>()
+
+  private inline fun <reified T : Enum<T>> Int.toEnum(): T = enumValues<T>()[this]
 }
