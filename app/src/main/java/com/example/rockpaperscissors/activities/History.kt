@@ -40,7 +40,7 @@ class History : AppCompatActivity() {
 
     rvHistory.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     rvHistory.adapter = gameHistoryAdapter
-
+//    getGames()
   }
   private fun deleteHistory() {
     //delete all games
@@ -50,11 +50,23 @@ class History : AppCompatActivity() {
       }
     }
     // update games after all are deleted
-    getGames()
+//    getGames()
   }
 
   private fun getGames() {
-//    mainScope.launch {  }
+    mainScope.launch {
+      val gameHistory = withContext(Dispatchers.IO){
+        gameRepository.getAllGames()
+      }
+      if (listOFGames.isEmpty()){
+        listOFGames.addAll(gameHistory)
+        gameHistoryAdapter.notifyDataSetChanged()
+      }else{
+        listOFGames.clear()
+        listOFGames.addAll(gameHistory)
+        gameHistoryAdapter.notifyDataSetChanged()
+      }
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -72,10 +84,14 @@ class History : AppCompatActivity() {
         true
       }
       android.R.id.home -> {
-        finish()
+        var intent = Intent(this, MainActivity::class.java)
+        startActivityForResult(intent, HISTORY_DATA)
         true
       }
       else -> super.onOptionsItemSelected(item)
     }
+  }
+  companion object{
+    const val HISTORY_DATA = 1
   }
 }

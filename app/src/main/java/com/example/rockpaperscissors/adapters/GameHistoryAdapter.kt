@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rockpaperscissors.R
 import com.example.rockpaperscissors.models.Game
+import kotlinx.android.synthetic.main.item_game.view.*
+import java.util.*
 
 class GameHistoryAdapter(private val playedGames: List<Game>): RecyclerView.Adapter<GameHistoryAdapter.ViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameHistoryAdapter.ViewHolder {
@@ -20,6 +22,12 @@ class GameHistoryAdapter(private val playedGames: List<Game>): RecyclerView.Adap
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(game: Game) {
+      val date = Calendar.getInstance().time
+      itemView.tvDateTime.text = date.toString()
+
+
+
+
     }
   }
 }
