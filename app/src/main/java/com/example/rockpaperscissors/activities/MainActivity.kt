@@ -8,16 +8,24 @@ import android.view.MenuItem
 import com.example.rockpaperscissors.R
 import com.example.rockpaperscissors.enums.Move
 import com.example.rockpaperscissors.enums.MatchResult
+import com.example.rockpaperscissors.models.Game
+import com.example.rockpaperscissors.repositories.GameRepository
 import kotlinx.android.synthetic.main.activity_main.*
-import java.sql.Date
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+  private lateinit var gameRepository: GameRepository
+  private val mainScope = CoroutineScope(Dispatchers.Main)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbarMain)
+
+    gameRepository = GameRepository(this)
 
     initViews()
   }
@@ -30,7 +38,21 @@ class MainActivity : AppCompatActivity() {
 
   private fun createGame(playerMove: Move) {
     val date = Calendar.getInstance().time
-    println(date)
+    var botMove = (0..2).random().toEnum<Move>()
+
+    var game = Game(
+      date = date,
+      playerMove = playerMove,
+      botMove = botMove
+    )
+    game.matchResult = winLoseCheck(playerMove, botMove)
+
+    println(game)
+
+//    mainScope.launch {
+//      gameRepository.insertGame(game)
+//    }
+
 
 //    TODO("add some database stuff")
 //    TODO("date now")
@@ -38,15 +60,17 @@ class MainActivity : AppCompatActivity() {
 //    TODO("create function to handle move given to change image etc")
   }
 
-  private fun winLoseCheck(playerMove: Move, computerMove: Move): MatchResult {
-    return when(setOf(playerMove, computerMove)) {
-      setOf(Move.ROCK, Move.ROCK) -> MatchResult.DRAW
-      setOf(Move.PAPER, Move.PAPER) -> MatchResult.DRAW
-      setOf(Move.SCISSORS, Move.SCISSORS) -> MatchResult.DRAW
-      setOf(Move.ROCK, Move.PAPER) -> MatchResult.LOSE
-      setOf(Move.PAPER, Move.SCISSORS) -> MatchResult.LOSE
-      setOf(Move.SCISSORS, Move.ROCK) -> MatchResult.LOSE
-      else -> MatchResult.WIN
+  private fun winLoseCheck(playerMove: Move, botMove: Move): MatchResult {
+    if (playerMove == botMove) return MatchResult.DRAW
+    
+    return if (playerMove == Move.SCISSORS && botMove == Move.ROCK) {
+      MatchResult.LOSE
+    }else if (playerMove == Move.ROCK && botMove == Move.PAPER){
+      MatchResult.LOSE
+    }else if (playerMove == Move.PAPER && botMove == Move.SCISSORS){
+      MatchResult.LOSE
+    } else {
+      MatchResult.WIN
     }
   }
 
@@ -69,7 +93,10 @@ class MainActivity : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
   }
+  private inline fun <reified Move : Enum<Move>> Int.toEnum(): Move = enumValues<Move>()[this]
+
   companion object{
     const val DATA = 0
   }
 }
+

@@ -8,5 +8,4 @@ class MatchResultConverter {
   fun matchResultToInt(value: MatchResult): Int = value.ordinal
   @TypeConverter
   fun intToMatchResult(value: Int) = enumValueOf<MatchResult>(value.toString())
-
 }

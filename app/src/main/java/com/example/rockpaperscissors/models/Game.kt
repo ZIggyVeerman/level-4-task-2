@@ -8,13 +8,13 @@ import com.example.rockpaperscissors.enums.Move
 import com.example.rockpaperscissors.enums.MatchResult
 
 import kotlinx.android.parcel.Parcelize
-import java.sql.Date
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "game_table")
 data class Game (
   @ColumnInfo(name = "date")
-  var date: Date?,
+  var date: Date,
 
   @ColumnInfo(name = "playerMove")
   var playerMove: Move,
