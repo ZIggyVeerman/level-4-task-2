@@ -5,37 +5,52 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rockpaperscissors.R
+import com.example.rockpaperscissors.adapters.GameHistoryAdapter
+import com.example.rockpaperscissors.models.Game
 import com.example.rockpaperscissors.repositories.GameRepository
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class History : AppCompatActivity() {
   private lateinit var gameRepository: GameRepository
   private val mainScope = CoroutineScope(Dispatchers.Main)
+  private var listOFGames = arrayListOf<Game>()
+  private var gameHistoryAdapter = GameHistoryAdapter(listOFGames)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_history)
     setSupportActionBar(toolbarHistory)
-    supportActionBar?.title = "Game History"
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     gameRepository = GameRepository(this)
 
     initViews()
-
   }
 
   private fun initViews(){
+    supportActionBar?.title = "Game History"
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+    rvHistory.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    rvHistory.adapter = gameHistoryAdapter
 
   }
-
-  private fun deleteHistory(){
-
+  private fun deleteHistory() {
+    //delete all games
+    mainScope.launch {
+      withContext(Dispatchers.IO) {
+        gameRepository.deleteAllGamesFromHistory()
+      }
+    }
+    // update games after all are deleted
+    getGames()
   }
 
   private fun getGames() {
@@ -50,8 +65,7 @@ class History : AppCompatActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
+    // automatically handle clicks on the Home/Up button
     return when (item.itemId) {
       R.id.ic_delete_white -> {
         deleteHistory()
