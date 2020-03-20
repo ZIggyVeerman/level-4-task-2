@@ -3,6 +3,7 @@ package com.example.rockpaperscissors.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.rockpaperscissors.R
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun initViews() {
+    updateStats()
     ivPaper.setOnClickListener{createGame(Move.PAPER)}
     ivRock.setOnClickListener{createGame(Move.ROCK)}
     ivScissors.setOnClickListener{createGame(Move.SCISSORS)}
@@ -50,7 +52,10 @@ class MainActivity : AppCompatActivity() {
 
       withContext(Dispatchers.IO) {
         gameRepository.insertGame(game)
+        Log.i("database", "added game to database: $game")
       }
+      updateGame(game)
+      updateStats()
     }
   }
 
@@ -65,6 +70,42 @@ class MainActivity : AppCompatActivity() {
       MatchResult.LOSE
     } else {
       MatchResult.WIN
+    }
+  }
+
+  private fun updateGame(game: Game){
+    when(game.playerMove){
+      Move.SCISSORS -> ivPicked.setImageResource(R.drawable.scissors)
+      Move.PAPER -> ivPicked.setImageResource(R.drawable.paper)
+      Move.ROCK -> ivPicked.setImageResource(R.drawable.rock)
+    }
+
+    when(game.botMove){
+      Move.SCISSORS -> ivComputerPicked.setImageResource(R.drawable.scissors)
+      Move.PAPER -> ivComputerPicked.setImageResource(R.drawable.paper)
+      Move.ROCK -> ivComputerPicked.setImageResource(R.drawable.rock)
+    }
+
+    when(game.matchResult){
+      MatchResult.WIN -> tvWinLose.text = "You Win!"
+      MatchResult.LOSE -> tvWinLose.text = "Loser!"
+      MatchResult.DRAW -> tvWinLose.text = "Draw"
+    }
+  }
+
+  private fun updateStats() {
+    mainScope.launch {
+      val gameWins = withContext(Dispatchers.IO){
+        gameRepository.getWins()
+      }
+      val gameLoses = withContext(Dispatchers.IO){
+        gameRepository.getLose()
+      }
+      val gameDraws = withContext(Dispatchers.IO){
+        gameRepository.getDraws()
+      }
+
+      tvStats.text = "Wins: $gameWins, Loses: $gameLoses, Draws: $gameDraws"
     }
   }
 
