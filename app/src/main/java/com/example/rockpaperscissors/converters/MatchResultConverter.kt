@@ -9,5 +9,6 @@ class MatchResultConverter {
   @TypeConverter
   fun intToMatchResult(value: Int) = value.toEnum<MatchResult>()
 
+  // cast Int to enum
   private inline fun <reified T : Enum<T>> Int.toEnum(): T = enumValues<T>()[this]
 }

@@ -26,20 +26,32 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbarMain)
-
+    // initialize the game repository give it the context of the activity
     gameRepository = GameRepository(this)
 
     initViews()
   }
 
+  /**
+   * Initviews method to create all things that have to start on create
+   */
   private fun initViews() {
+    // update stats on page load so that they are on par with what is in the database
+    // add clicklistener to the images
     updateStats()
     ivPaper.setOnClickListener{createGame(Move.PAPER)}
     ivRock.setOnClickListener{createGame(Move.ROCK)}
     ivScissors.setOnClickListener{createGame(Move.SCISSORS)}
   }
 
+  /**
+   * method to create a game takes player move as parameter
+   */
   private fun createGame(playerMove: Move) {
+    // botmove is random number between 0 and 2 and is casted to enum move
+    // this in order to be stored in the database
+    // created game for Game model which holds the date, playermove and botmove
+    // added matchresult to game model, this based on win lose check
     mainScope.launch {
       var botMove = (0..2).random().toEnum<Move>()
 
@@ -49,16 +61,22 @@ class MainActivity : AppCompatActivity() {
         botMove = botMove
       )
       game.matchResult = winLoseCheck(playerMove, botMove)
-
+      // use Dispatchers IO for database call
+      // insert new game into database
       withContext(Dispatchers.IO) {
         gameRepository.insertGame(game)
         Log.i("database", "added game to database: $game")
       }
+      // update activity with new game
+      // update stats method called
       updateGame(game)
       updateStats()
     }
   }
 
+  /**
+   * method to check the win
+   */
   private fun winLoseCheck(playerMove: Move, botMove: Move): MatchResult {
     if (playerMove == botMove) return MatchResult.DRAW
 
@@ -73,19 +91,23 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  /**
+   * method to update the acitvity after match is played
+   */
   private fun updateGame(game: Game){
+    // check what player move was given
     when(game.playerMove){
       Move.SCISSORS -> ivPicked.setImageResource(R.drawable.scissors)
       Move.PAPER -> ivPicked.setImageResource(R.drawable.paper)
       Move.ROCK -> ivPicked.setImageResource(R.drawable.rock)
     }
-
+    // check what botmove was given
     when(game.botMove){
       Move.SCISSORS -> ivComputerPicked.setImageResource(R.drawable.scissors)
       Move.PAPER -> ivComputerPicked.setImageResource(R.drawable.paper)
       Move.ROCK -> ivComputerPicked.setImageResource(R.drawable.rock)
     }
-
+    // check the matchresult
     when(game.matchResult){
       MatchResult.WIN -> tvWinLose.text = this.resources.getString(R.string.Winner)
       MatchResult.LOSE -> tvWinLose.text = this.resources.getString(R.string.Loser)
@@ -93,7 +115,11 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  /**
+   * method to update the game stats
+   */
   private fun updateStats() {
+    // get the gameWIns gameLoses and Draws as variables to be used in the textfield
     mainScope.launch {
       val gameWins = withContext(Dispatchers.IO){
         gameRepository.getWins()
@@ -117,8 +143,7 @@ class MainActivity : AppCompatActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
+    // handle the click and go to history activity
     return when (item.itemId) {
       R.id.ic_history_white -> {
         var intent = Intent(this, History::class.java)
@@ -128,10 +153,14 @@ class MainActivity : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
   }
+  // inline function to be able to cast Int to Enum needed for move
   private inline fun <reified Move : Enum<Move>> Int.toEnum(): Move = enumValues<Move>()[this]
 
+  /**
+   * companion object with standard value 100
+   */
   companion object{
-    const val DATA = 0
+    const val DATA = 100
   }
 }
 

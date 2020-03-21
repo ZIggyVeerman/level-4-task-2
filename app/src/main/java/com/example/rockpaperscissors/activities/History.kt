@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rockpaperscissors.R
@@ -12,7 +13,6 @@ import com.example.rockpaperscissors.adapters.GameHistoryAdapter
 import com.example.rockpaperscissors.models.Game
 import com.example.rockpaperscissors.repositories.GameRepository
 import kotlinx.android.synthetic.main.activity_history.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,22 +28,31 @@ class History : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_history)
     setSupportActionBar(toolbarHistory)
-
+    //initialize the gameRepository and give it the activity context
     gameRepository = GameRepository(this)
 
     initViews()
   }
-
+  /**
+   * Initviews method to create all things that have to start on create
+   */
   private fun initViews(){
     supportActionBar?.title = "Game History"
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+    // Initialize the recycler view with a linear layout manager, adapter
     rvHistory.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     rvHistory.adapter = gameHistoryAdapter
+    rvHistory.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     getGames()
   }
+
+  /**
+   * method to delete game history
+   */
   private fun deleteHistory() {
-    //delete all games
+    // Coroutinescope laucnh to delete all games
+    // context use of Dispartchers IO to do database work
     mainScope.launch {
       withContext(Dispatchers.IO) {
         gameRepository.deleteAllGamesFromHistory()
@@ -53,11 +62,19 @@ class History : AppCompatActivity() {
     getGames()
   }
 
+  /**
+   * method to get games played
+   */
   private fun getGames() {
+    // Coroutinescope launch to get game history
+    // variable gameHistory is set to be used
+    // context use of Dispartchers IO to do database work
     mainScope.launch {
       val gameHistory = withContext(Dispatchers.IO){
         gameRepository.getAllGames()
       }
+      // if list is empty add game at the top and notify that the set has changed
+      // if list was not empty clear list to not get doubles and add game, after this notify data set changed
       if (listOFGames.isEmpty()){
         listOFGames.addAll(gameHistory)
         gameHistoryAdapter.notifyDataSetChanged()
@@ -78,6 +95,7 @@ class History : AppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     // Handle action bar item clicks here. The action bar will
     // automatically handle clicks on the Home/Up button
+    // if delete button is clicked deleteHistory will be  called
     return when (item.itemId) {
       R.id.ic_delete_white -> {
         deleteHistory()
@@ -91,7 +109,11 @@ class History : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
   }
+
+  /**
+   * companion object with standard value of 100
+   */
   companion object{
-    const val HISTORY_DATA = 1
+    const val HISTORY_DATA = 100
   }
 }
