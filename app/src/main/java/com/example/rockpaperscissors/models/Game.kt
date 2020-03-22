@@ -12,7 +12,7 @@ import java.util.*
 
 @Parcelize
 @Entity(tableName = "game_table")
-data class Game (
+data class Game(
   @ColumnInfo(name = "date")
   var date: Date,
 
@@ -20,7 +20,7 @@ data class Game (
   var playerMove: Move,
 
   @ColumnInfo(name = "botMove")
-  var botMove : Move,
+  var botMove: Move,
 
   @ColumnInfo(name = "matchResult")
   var matchResult: MatchResult? = null,

@@ -11,7 +11,8 @@ import com.example.rockpaperscissors.models.Game
 import kotlinx.android.synthetic.main.item_game.view.*
 import java.util.*
 
-class GameHistoryAdapter(private val playedGames: List<Game>): RecyclerView.Adapter<GameHistoryAdapter.ViewHolder>() {
+class GameHistoryAdapter(private val playedGames: List<Game>) :
+  RecyclerView.Adapter<GameHistoryAdapter.ViewHolder>() {
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(game: Game) {
       //create date property and assign it to a textfield
@@ -52,6 +53,7 @@ class GameHistoryAdapter(private val playedGames: List<Game>): RecyclerView.Adap
       LayoutInflater.from(parent.context).inflate(R.layout.item_game, parent, false)
     )
   }
+
   /**
    * Returns the size of the list
    */

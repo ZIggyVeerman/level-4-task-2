@@ -33,10 +33,11 @@ class History : AppCompatActivity() {
 
     initViews()
   }
+
   /**
    * Initviews method to create all things that have to start on create
    */
-  private fun initViews(){
+  private fun initViews() {
     supportActionBar?.title = "Game History"
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -70,15 +71,15 @@ class History : AppCompatActivity() {
     // variable gameHistory is set to be used
     // context use of Dispartchers IO to do database work
     mainScope.launch {
-      val gameHistory = withContext(Dispatchers.IO){
+      val gameHistory = withContext(Dispatchers.IO) {
         gameRepository.getAllGames()
       }
       // if list is empty add game at the top and notify that the set has changed
       // if list was not empty clear list to not get doubles and add game, after this notify data set changed
-      if (listOFGames.isEmpty()){
+      if (listOFGames.isEmpty()) {
         listOFGames.addAll(gameHistory)
         gameHistoryAdapter.notifyDataSetChanged()
-      }else{
+      } else {
         listOFGames.clear()
         listOFGames.addAll(gameHistory)
         gameHistoryAdapter.notifyDataSetChanged()
@@ -113,7 +114,7 @@ class History : AppCompatActivity() {
   /**
    * companion object with standard value of 100
    */
-  companion object{
+  companion object {
     const val HISTORY_DATA = 100
   }
 }

@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
     // update stats on page load so that they are on par with what is in the database
     // add clicklistener to the images
     updateStats()
-    ivPaper.setOnClickListener{createGame(Move.PAPER)}
-    ivRock.setOnClickListener{createGame(Move.ROCK)}
-    ivScissors.setOnClickListener{createGame(Move.SCISSORS)}
+    ivPaper.setOnClickListener { createGame(Move.PAPER) }
+    ivRock.setOnClickListener { createGame(Move.ROCK) }
+    ivScissors.setOnClickListener { createGame(Move.SCISSORS) }
   }
 
   /**
@@ -82,9 +82,9 @@ class MainActivity : AppCompatActivity() {
 
     return if (playerMove == Move.SCISSORS && botMove == Move.ROCK) {
       MatchResult.LOSE
-    }else if (playerMove == Move.ROCK && botMove == Move.PAPER){
+    } else if (playerMove == Move.ROCK && botMove == Move.PAPER) {
       MatchResult.LOSE
-    }else if (playerMove == Move.PAPER && botMove == Move.SCISSORS){
+    } else if (playerMove == Move.PAPER && botMove == Move.SCISSORS) {
       MatchResult.LOSE
     } else {
       MatchResult.WIN
@@ -94,21 +94,21 @@ class MainActivity : AppCompatActivity() {
   /**
    * method to update the acitvity after match is played
    */
-  private fun updateGame(game: Game){
+  private fun updateGame(game: Game) {
     // check what player move was given
-    when(game.playerMove){
+    when (game.playerMove) {
       Move.SCISSORS -> ivPicked.setImageResource(R.drawable.scissors)
       Move.PAPER -> ivPicked.setImageResource(R.drawable.paper)
       Move.ROCK -> ivPicked.setImageResource(R.drawable.rock)
     }
     // check what botmove was given
-    when(game.botMove){
+    when (game.botMove) {
       Move.SCISSORS -> ivComputerPicked.setImageResource(R.drawable.scissors)
       Move.PAPER -> ivComputerPicked.setImageResource(R.drawable.paper)
       Move.ROCK -> ivComputerPicked.setImageResource(R.drawable.rock)
     }
     // check the matchresult
-    when(game.matchResult){
+    when (game.matchResult) {
       MatchResult.WIN -> tvWinLose.text = this.resources.getString(R.string.Winner)
       MatchResult.LOSE -> tvWinLose.text = this.resources.getString(R.string.Loser)
       MatchResult.DRAW -> tvWinLose.text = this.resources.getString(R.string.Draw)
@@ -121,13 +121,13 @@ class MainActivity : AppCompatActivity() {
   private fun updateStats() {
     // get the gameWIns gameLoses and Draws as variables to be used in the textfield
     mainScope.launch {
-      val gameWins = withContext(Dispatchers.IO){
+      val gameWins = withContext(Dispatchers.IO) {
         gameRepository.getWins()
       }
-      val gameLoses = withContext(Dispatchers.IO){
+      val gameLoses = withContext(Dispatchers.IO) {
         gameRepository.getLose()
       }
-      val gameDraws = withContext(Dispatchers.IO){
+      val gameDraws = withContext(Dispatchers.IO) {
         gameRepository.getDraws()
       }
       // TODO need to add stuff here
@@ -153,13 +153,14 @@ class MainActivity : AppCompatActivity() {
       else -> super.onOptionsItemSelected(item)
     }
   }
+
   // inline function to be able to cast Int to Enum needed for move
   private inline fun <reified Move : Enum<Move>> Int.toEnum(): Move = enumValues<Move>()[this]
 
   /**
    * companion object with standard value 100
    */
-  companion object{
+  companion object {
     const val DATA = 100
   }
 }

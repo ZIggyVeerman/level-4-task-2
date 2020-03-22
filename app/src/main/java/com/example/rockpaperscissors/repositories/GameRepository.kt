@@ -12,6 +12,7 @@ class GameRepository(context: Context) {
     val database = GameRoomDatabase.getDatabase(context)
     gameDao = database?.gameDao()
   }
+
   suspend fun getAllGames(): List<Game> = gameDao?.getAllGames() ?: emptyList()
 
   suspend fun getWins(): Int? = gameDao?.getWins()

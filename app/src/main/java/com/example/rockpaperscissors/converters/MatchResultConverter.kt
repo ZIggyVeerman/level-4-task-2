@@ -6,6 +6,7 @@ import com.example.rockpaperscissors.enums.MatchResult
 class MatchResultConverter {
   @TypeConverter
   fun matchResultToInt(value: MatchResult): Int = value.ordinal
+
   @TypeConverter
   fun intToMatchResult(value: Int) = value.toEnum<MatchResult>()
 

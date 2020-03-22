@@ -10,7 +10,7 @@ import com.example.rockpaperscissors.models.Game
 
 @Database(entities = [Game::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class, MoveConverter::class, MatchResultConverter::class)
-abstract class GameRoomDatabase: RoomDatabase() {
+abstract class GameRoomDatabase : RoomDatabase() {
 
   abstract fun gameDao(): GameDao
 
@@ -21,17 +21,17 @@ abstract class GameRoomDatabase: RoomDatabase() {
     private var gameRoomDatabaseInstance: GameRoomDatabase? = null
 
     fun getDatabase(context: Context): GameRoomDatabase? {
-      if(gameRoomDatabaseInstance != null) return gameRoomDatabaseInstance
+      if (gameRoomDatabaseInstance != null) return gameRoomDatabaseInstance
 
-        synchronized(GameRoomDatabase::class.java){
-          if (gameRoomDatabaseInstance == null){
-            gameRoomDatabaseInstance = Room.databaseBuilder(
-                context.applicationContext,
-                GameRoomDatabase::class.java, DATABASE_NAME
-              )
-              .build()
-          }
+      synchronized(GameRoomDatabase::class.java) {
+        if (gameRoomDatabaseInstance == null) {
+          gameRoomDatabaseInstance = Room.databaseBuilder(
+              context.applicationContext,
+              GameRoomDatabase::class.java, DATABASE_NAME
+            )
+            .build()
         }
+      }
       return gameRoomDatabaseInstance
     }
   }
