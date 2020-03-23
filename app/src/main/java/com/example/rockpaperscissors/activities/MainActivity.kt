@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
    */
   private fun initViews() {
     // update stats on page load so that they are on par with what is in the database
-    // add clicklistener to the images
+    // add click listener to the images
     updateStats()
     ivPaper.setOnClickListener { createGame(Move.PAPER) }
     ivRock.setOnClickListener { createGame(Move.ROCK) }
@@ -130,8 +130,7 @@ class MainActivity : AppCompatActivity() {
       val gameDraws = withContext(Dispatchers.IO) {
         gameRepository.getDraws()
       }
-      // TODO need to add stuff here
-      tvStats.text = "Wins: $gameWins, Loses: $gameLoses, Draws: $gameDraws"
+      tvStats.text = getString(R.string.stat_show, gameWins, gameLoses,gameDraws)
     }
   }
 

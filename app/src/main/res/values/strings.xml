@@ -16,4 +16,6 @@
   <string name="Draw">Draw</string>
   <string name="Loser">Loser!</string>
   <string name="Winner">Winner!</string>
+  <string name="stat_show">Wins: %1$d, Loses: %2$d, Draws: %3$d</string>
+  //"Wins: $gameWins, Loses: $gameLoses, Draws: $gameDraws"
 </resources>
